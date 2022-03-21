@@ -10,10 +10,23 @@ app.use(express.json()) // -> req.body
 
 // ROUTES 
 
-//GET
+// GET ALL
 app.get("/inventory", async(req,res)=>{
     try {
+        
         const allProducts = await pool.query("SELECT * FROM inventory")
+        res.json(allProducts.rows)
+
+    } catch (error) {
+        console.error(error.message)
+    }
+}) 
+
+//GET IF PRODUCTS ARE AVAILABLE
+app.get("/inventory/:IsAvailable", async(req,res)=>{
+    try {
+        const {IsAvailable} = req.params
+        const allProducts = await pool.query("SELECT * FROM inventory WHERE $1=TRUE ", [IsAvailable])
         res.json(allProducts.rows)
 
     } catch (error) {
@@ -24,7 +37,7 @@ app.get("/inventory", async(req,res)=>{
 // CREATE
 app.post('/inventory', async(req,res)=>{
     try {
-        const {itemID, quantity, IsAvailable, PricePerItem,CreatedAt,sellerID} = req.body
+        const {itemID, quantity, IsAvailable, PricePerItem,CreatedAt} = req.body
         const newProduct = await pool.query("INSERT INTO inventory(itemID, quantity, IsAvailable, PricePerItem,CreatedAt) VALUES ($1,$2,$3,$4,$5) RETURNING *",[itemID, quantity,IsAvailable,PricePerItem,CreatedAt])
         
         res.json(newProduct)
