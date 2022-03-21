@@ -25,7 +25,7 @@ app.get("/inventory", async(req,res)=>{
 app.post('/inventory', async(req,res)=>{
     try {
         const {itemID, quantity, IsAvailable, PricePerItem,CreatedAt,sellerID} = req.body
-        const newProduct = await pool.query("INSERT INTO inventory(itemID, quantity, IsAvailable, PricePerItem,CreatedAt,sellerID) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",[itemID, quantity,IsAvailable,PricePerItem,CreatedAt,sellerID])
+        const newProduct = await pool.query("INSERT INTO inventory(itemID, quantity, IsAvailable, PricePerItem,CreatedAt) VALUES ($1,$2,$3,$4,$5) RETURNING *",[itemID, quantity,IsAvailable,PricePerItem,CreatedAt])
         
         res.json(newProduct)
     } catch (error) {
