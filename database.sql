@@ -4,10 +4,9 @@ CREATE DATABASE inventory_database;
 CREATE TABLE inventory(
     itemID SERIAL PRIMARY KEY,
     quantity INT NOT NULL,
-    IsAvailable VARCHAR(10) NOT NULL,
+    IsAvailable boolean DEFAULT false NOT NULL,
     PricePerItem DOUBLE PRECISION NOT NULL,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    sellerID SERIAL NOT NULL
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 --create product image
