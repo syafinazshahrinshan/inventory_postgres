@@ -87,6 +87,28 @@ app.put("/inventory/:itemID",async(req,res)=>{
     }
 })
 
+
+//UPDATE
+app.put("/inventory/update-value/:itemID",async(req,res)=>{
+    try {
+        const{itemID}=req.params //WHERE
+        const{quantity} = req.body // SET
+
+        const p = await pool.query("SELECT * FROM inventory Where itemID=$1",[itemID])
+        if(p.rowCount==0){
+            res.status(404).json("Item Not Found");
+        }
+        let product = p.rows[0];
+        quantity = product.quantity - quantity
+        const updateProduct= await pool.query("UPDATE inventory SET quantity = $1 WHERE itemID=$2", [quantity,itemID])
+
+        res.json("Update Successful!")
+    } catch (error) {
+        console.error(error.message)
+        res.json(error.message)
+    }
+})
+
 //DELETE
 app.delete("/inventory/:itemID", async(req,res)=>{
     try {
