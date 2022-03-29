@@ -99,8 +99,8 @@ app.put("/inventory/update-value/:itemID",async(req,res)=>{
             res.status(404).json("Item Not Found");
         }
         let product = p.rows[0];
-        quantity = product.quantity - quantity
-        const updateProduct= await pool.query("UPDATE inventory SET quantity = $1 WHERE itemID=$2", [quantity,itemID])
+        let newQuantity = product.quantity - quantity
+        const updateProduct= await pool.query("UPDATE inventory SET quantity = $1 WHERE itemID=$2", [newQuantity,itemID])
 
         res.json("Update Successful!")
     } catch (error) {
