@@ -46,7 +46,7 @@ app.get("/inventory/:itemID", async(req,res)=>{
 
 
 //GET IF PRODUCTS ARE AVAILABLE
-app.get("/inventory/available", async(req,res)=>{
+app.get("/inventory/all/available", async(req,res)=>{
     try {
         const allProducts = await pool.query("SELECT * FROM inventory WHERE IsAvailable=TRUE ")
         res.json(allProducts.rows)
