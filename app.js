@@ -1,6 +1,12 @@
 const express = require('express');
 const app = express();
 
+const cors = require('cors')
+app.use(
+    cors({
+        origin:"*",
+    })
+)
 
 //run queries on the pool
 const pool = require("./db")
@@ -12,6 +18,7 @@ app.use(express.json()) // -> req.body
 
 // GET ALL
 app.get("/inventory/getAll", async(req,res)=>{
+
     try {
         
         const allProducts = await pool.query("SELECT * FROM inventory")
@@ -52,10 +59,13 @@ app.get("/inventory/available", async(req,res)=>{
 
 // CREATE
 app.post('/inventory/create', async(req,res)=>{
+    
+
     try {
         const {name, quantity, isAvailable, pricePerItem, url} = req.body
         const newProduct = await pool.query("INSERT INTO inventory(name, quantity, isAvailable, pricePerItem, url) VALUES ($1,$2,$3,$4,$5) RETURNING *",[name,quantity,isAvailable,pricePerItem,url])
-        res.json(newProduct.rowCount)
+        res.json(newProduct)
+        console.log("Product Created")
     } catch (error) {
         console.error(error.message)
         res.json(error.message)
