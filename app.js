@@ -104,6 +104,13 @@ app.get('/', function(req, res) {
     res.send('Hello world!')
 }); 
 
-app.listen(3050, () => {
+app.listen(3050, async() => {
+    const allProducts = await pool.query("SELECT * FROM inventory")
+    //Seeding data
+    if(allProducts.rowCount==0){
+        await pool.query("INSERT INTO inventory(name, quantity, isAvailable, pricePerItem, url) VALUES ($1,$2,$3,$4,$5) RETURNING *",["Saka68",100,true,349,"https://cdn.shopify.com/s/files/1/0068/3599/4706/products/DSC02005_1296x.jpg?v=1645802112"])
+        await pool.query("INSERT INTO inventory(name, quantity, isAvailable, pricePerItem, url) VALUES ($1,$2,$3,$4,$5) RETURNING *",["Ikki68",100,true,412,"https://cdn.shopify.com/s/files/1/0238/7342/1376/products/mizu-1_1080x.jpg?v=1614126661"])
+        await pool.query("INSERT INTO inventory(name, quantity, isAvailable, pricePerItem, url) VALUES ($1,$2,$3,$4,$5) RETURNING *",["Aozora",100,true,250,"https://i.imgur.com/d5QJbiQ.jpeg"])
+    }
     console.log('Server Started');
 });
